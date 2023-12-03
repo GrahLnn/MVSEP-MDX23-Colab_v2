@@ -1,7 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="mvsep_mdx23_colab_v2",
+    name="mdx23",
+    py_modules=["mdx23"],
     version="0.1.0",
     packages=find_packages(),
     install_requires=open("requirements.txt").read().splitlines(),
