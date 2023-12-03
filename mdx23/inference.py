@@ -186,7 +186,9 @@ def demix_full_mdx23c(mix, device, model):
 
     results = []
 
-    for shift in tqdm(shifts, position=0):
+    for shift in tqdm(
+        shifts, position=0, desc="Processing vocals with MDXv3 InstVocHQ model"
+    ):
         shifted_mix = np.concatenate((mix[:, -shift:], mix[:, :-shift]), axis=-1)
         sources = demix_base_mdxv3(model, shifted_mix, device)["Vocals"]
         sources *= 1.0005168  # volume compensation
@@ -361,7 +363,7 @@ def demix_full_vitlarge(mix, device, model):
     results1 = []
     results2 = []
 
-    for shift in tqdm(shifts, position=0):
+    for shift in tqdm(shifts, position=0, desc="Processing vocals with VitLarge model"):
         shifted_mix = torch.cat((mix[:, -shift:], mix[:, :-shift]), dim=-1)
         sources = demix_vitlarge(model, shifted_mix, device)
         sources1 = sources["vocals"] * 1.002  # volume compensation
@@ -600,14 +602,14 @@ class EnsembleDemucsMDXMusicSeparationModel:
         del model_vocals
         """
 
-        print("Processing vocals with VitLarge model...")
+        # print("Processing vocals with VitLarge model...")
         vocals4, instrum4 = demix_full_vitlarge(audio, self.device, self.model_vl)
         vocals4 = match_array_shapes(vocals4, mixed_sound_array.T)
         # print('Time: {:.0f} sec'.format(time() - start_time))
         # sf.write("/content/drive/MyDrive/output/vocals4.wav", vocals4.T, 44100)
         # sf.write("instrum4.wav", instrum4.T, 44100)
 
-        print("Processing vocals with MDXv3 InstVocHQ model...")
+        # print("Processing vocals with MDXv3 InstVocHQ model...")
         sources3 = demix_full_mdx23c(mixed_sound_array.T, self.device, self.model_mdxv3)
         vocals3 = match_array_shapes(sources3, mixed_sound_array.T)
         # print('Time: {:.0f} sec'.format(time() - start_time))
@@ -635,7 +637,7 @@ class EnsembleDemucsMDXMusicSeparationModel:
             vocals_mdxb1 = sources1
             # sf.write("vocals_mdxb1.wav", vocals_mdxb1.T, 44100)
 
-        print("Processing vocals: DONE!")
+        # print("Processing vocals: DONE!")
 
         # Vocals Weighted Multiband Ensemble :
         if options["use_VOCFT"] is False:
