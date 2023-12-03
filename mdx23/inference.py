@@ -32,9 +32,9 @@ import sys
 import math
 import pathlib
 import warnings
-from modules.tfc_tdf_v3 import TFC_TDF_net, STFT
+from .modules.tfc_tdf_v3 import TFC_TDF_net, STFT
 from scipy.signal import resample_poly
-from modules.segm_models import Segm_Models_Net
+from .modules.segm_models import Segm_Models_Net
 
 
 class Conv_TDF_net_trim_model(nn.Module):
