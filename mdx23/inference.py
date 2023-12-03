@@ -38,6 +38,8 @@ from scipy.signal import resample_poly
 from .modules.segm_models import Segm_Models_Net
 import appdirs
 
+options = {}
+
 
 class Conv_TDF_net_trim_model(nn.Module):
     def __init__(self, device, target_name, L, n_fft, hop=1024):
@@ -913,6 +915,12 @@ def match_array_shapes(array_1: np.ndarray, array_2: np.ndarray):
         padding = array_2.shape[1] - array_1.shape[1]
         array_1 = np.pad(array_1, ((0, 0), (0, padding)), "constant", constant_values=0)
     return array_1
+
+
+def start(args):
+    global options
+    options = args
+    predict_with_model(options)
 
 
 if __name__ == "__main__":
